@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Romantique</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Superposition du dégradé qui apparaîtra progressivement -->
+    <div id="gradientOverlay"></div>
+    <div id="secondGradientOverlay"></div>
+
+    <div id="terminal">
+        <pre id="asciiArt"></pre>
+        <div id="output"></div>
+        <div id="command-line">
+            <span id="prompt">Entrée :</span>
+            <input type="text" id="input" autofocus>
+        </div>
+    </div>
+
+    <div id="lettersContainer" style="display: none;"></div>
+    <div id="wordContainer" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 48px; display: flex;"></div>
+
+
+    <!-- Conteneur pour le quiz -->
+    <div id="quizContainer" style="display: none;">
+        <div id="quizQuestion"></div>
+        <div id="wordGrid"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

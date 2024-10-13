@@ -1,0 +1,251 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background: black;  /* Le fond du corps entier commence noir */
+    color: #00FF00;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;  /* Terminal commence en bas */
+    height: 100vh;
+    position: relative;  /* Nécessaire pour gérer l'overlay */
+    overflow: hidden;  /* Pour éviter les débordements */
+}
+
+#gradientOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, black, #852268);  /* Le dégradé */
+    opacity: 0;  /* On commence avec une opacité à 0 */
+    /* transition: opacity 1s ease-in-out;  /* Transition fluide de 1 secondes */
+    transform: translateY(100vh);
+    pointer-events: none;  /* Empêche d'interagir avec cet élément */
+}
+
+#secondGradientOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #852268, #7f3366);  /* Le dégradé */
+    opacity: 0;  /* On commence avec une opacité à 0 */
+    /* transition: opacity 1s ease-in-out;  /* Transition fluide de 1 secondes */
+    transform: translateY(100vh);
+    pointer-events: none;  /* Empêche d'interagir avec cet élément */
+}
+
+#terminal {
+    width: 80%;
+    height: auto;
+    padding: 10px;
+    overflow-y: auto;
+    position: relative;
+    transition: transform 1s ease-out; /* Transition pour le déplacement */
+    z-index: 1;  /* Pour que le terminal soit toujours visible au-dessus du dégradé */
+}
+
+#asciiArt {
+    color: #00FF00;
+    font-size: 16px;
+    white-space: pre;
+}
+
+#output {
+    margin-top: 20px;
+    color: #00FF00;
+}
+
+#command-line {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    color: #00FF00;
+}
+
+#prompt {
+    margin-right: 5px;
+}
+
+#input {
+    background-color: transparent;
+    color: #00FF00;
+    border: none;
+    outline: none;
+    font-size: 18px;
+    flex-grow: 1;
+    padding: 5px; /* Ajoute du padding pour un meilleur espacement */
+}
+
+/* Ajout d'une animation pour faire monter le terminal */
+.move-up {
+    transform: translateY(-90vh);  /* Déplace vers le haut de 90% de la hauteur de la fenêtre */
+}
+
+/* Ajout des styles pour le quiz */
+#quizContainer {
+    position: absolute;  /* Permet de le positionner librement */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* Centrage */
+    color: #00FF00;
+    text-align: center;
+    transition: transform 2s ease-out; /* Transition pour le déplacement */
+    display: none;  /* Cacher par défaut */
+}
+
+#quizQuestion {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#wordGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);  /* 4 colonnes */
+    gap: 10px;  /* Espacement entre les mots */
+}
+
+.word {
+    background-color: rgba(0, 255, 0, 0.2);  /* Fond léger pour les mots */
+    padding: 10px;
+    border-radius: 5px;  /* Coins arrondis */
+    cursor: pointer;  /* Curseur en main au survol */
+    transition: background-color 0.3s;  /* Effet au survol */
+}
+
+.word:hover {
+    background-color: rgba(0, 255, 0, 0.4);  /* Couleur plus foncée au survol */
+}
+
+/* Nouvelle classe pour faire défiler le terminal vers le bas */
+.slide-down {
+    animation: slideDown 1s forwards; /* Animation pour faire glisser le terminal vers le bas */
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(0); /* Position initiale */
+    }
+    to {
+        transform: translateY(100vh); /* Déplacer vers le bas hors de l'écran */
+    }
+}
+
+/* Style pour le conteneur principal */
+#main-container {
+    transition: transform 1s ease-in-out; /* Transition pour le mouvement */
+}
+
+/* Classe pour faire glisser le conteneur vers le haut */
+.slide-up-center {
+    animation: slideUpCenter 1s forwards; /* Utiliser l'animation slideUp */
+}
+
+@keyframes slideUpCenter {
+    from {
+        transform: translate(-50%, -50%); /* Position initiale */
+    }
+    to {
+        transform: translate(-50%, -100vh); /* Déplace vers le haut hors de l'écran */    }
+}
+
+.slide-up {
+    animation: slideUp 1s forwards; /* Utiliser l'animation slideUp */
+}
+
+@keyframes slideUp {
+from {
+    transform: translateY(-90vh); /* Position initiale */
+}
+to {
+    transform: translateY(-100vh); /* Déplacer vers le haut hors de l'écran */
+}
+}
+
+.come-up {
+    animation: comeUp 1s forwards; /* Utiliser l'animation slideUp */
+}
+
+@keyframes comeUp {
+from {
+    transform: translateY(110vh); /* Position initiale */
+}
+to {
+    transform: translateY(-95vh); /* Déplacer vers le haut hors de l'écran */
+}
+}
+.come-up-grad {
+    animation: comeUpGrad 1s forwards; /* Utiliser l'animation slideUp */
+}
+
+@keyframes comeUpGrad {
+from {
+    transform: translateY(100vh); /* Position initiale */
+}
+to {
+    transform: translateY(0vh); /* Déplacer vers le haut hors de l'écran */
+}
+}
+
+.goodbye-grad {
+    animation: goodbyeGrad 1s forwards; /* Utiliser l'animation slideUp */
+}
+
+@keyframes goodbyeGrad {
+from {
+    transform: translateY(0vh); /* Position initiale */
+}
+to {
+    transform: translateY(-100vh); /* Déplacer vers le haut hors de l'écran */
+}
+}
+
+/* Nouvelle classe pour faire apparaître un terminal */
+.new-terminal {
+    position: fixed; /* Positionnement fixe pour que le nouveau terminal soit en haut de la page */
+    top: 0; /* Positionner le nouveau terminal en haut */
+    width: 100%;
+    height: 50%; /* Hauteur du nouveau terminal */
+    background-color: black; /* Fond noir */
+    color: #00FF00; /* Couleur du texte */
+    padding: 10px; /* Espacement */
+    display: flex;
+    flex-direction: column; /* Alignement en colonne pour le contenu */
+    transform: translateY(-100%); /* Commencer hors de l'écran */
+    animation: slideIn 1s forwards; /* Animation pour faire glisser le nouveau terminal vers le bas */
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-100%); /* Commencer hors de l'écran */
+    }
+    to {
+        transform: translateY(0); /* Position finale */
+    }
+}
+
+#lettersContainer {
+    position: absolute;
+    top: 0; /* Vous pouvez ajuster la position */
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Les lettres ne doivent pas interférer avec d'autres interactions */
+    overflow: hidden; /* Pour éviter les débordements */
+}
+
+.letter {
+    position: absolute;
+    font-size: 30px; /* Taille des lettres */
+    color: #ff66cc; /* Couleur des lettres */
+    pointer-events: auto; /* Permet de cliquer sur les lettres */
+    cursor: pointer; /* Curseur en main au survol */
+    transition: transform 0.2s; /* Transition pour un effet au clic */
+}
