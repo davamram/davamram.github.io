@@ -42,6 +42,19 @@ body {
     pointer-events: none;  /* Empêche d'interagir avec cet élément */
 }
 
+#thirdGradientOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #7f3366, #ff66cc);  /* Le dégradé */
+    opacity: 0;  /* On commence avec une opacité à 0 */
+    /* transition: opacity 1s ease-in-out;  /* Transition fluide de 1 secondes */
+    transform: translateY(100vh);
+    pointer-events: none;  /* Empêche d'interagir avec cet élément */
+}
+
 #terminal {
     width: 80%;
     height: auto;
@@ -138,6 +151,19 @@ body {
     }
 }
 
+.slide-fromdown-center {
+    animation: slideFromDownCenter 1s forwards; /* Animation pour faire glisser le terminal vers le bas */
+}
+
+@keyframes slideFromDownCenter {
+    from {
+        transform: translate(-50%, 300%); /* Position initiale */
+    }
+    to {
+        transform: translate(-50%, -50%); /* Déplacer vers le bas hors de l'écran */
+    }
+}
+
 /* Style pour le conteneur principal */
 #main-container {
     transition: transform 1s ease-in-out; /* Transition pour le mouvement */
@@ -153,7 +179,7 @@ body {
         transform: translate(-50%, -50%); /* Position initiale */
     }
     to {
-        transform: translate(-50%, -100vh); /* Déplace vers le haut hors de l'écran */    }
+        transform: translate(-50%, -120vh); /* Déplace vers le haut hors de l'écran */    }
 }
 
 .slide-up {
@@ -248,4 +274,293 @@ to {
     pointer-events: auto; /* Permet de cliquer sur les lettres */
     cursor: pointer; /* Curseur en main au survol */
     transition: transform 0.2s; /* Transition pour un effet au clic */
+}
+
+/* Style pour créer le coeur */
+.heart {
+    position: relative;
+    width: 100px;
+    height: 90px;
+    background-color: red;
+    transform: rotate(-45deg);
+    margin-top: 50px;
+}
+
+.heart::before,
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.heart::before {
+    top: -50px;
+    left: 0;
+}
+
+.heart::after {
+    left: 50px;
+    top: 0;
+}
+
+/* Animation pour le coeur */
+.animate-heart {
+    animation: heartbeat 1s infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1) rotate(-45deg);
+    }
+    50% {
+        transform: scale(1.2) rotate(-45deg);
+    }
+}
+
+/* Style pour un cœur qui tombe */
+.falling-heart {
+    position: fixed;
+    top: -50px; /* Commence en dehors de la vue */
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    transform: rotate(45deg);
+    animation: fall linear infinite; /* Animation pour faire tomber le cœur */
+    z-index: 1000; /* Mettre au-dessus du contenu */
+}
+
+.falling-heart::before,
+.falling-heart::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.falling-heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.falling-heart::after {
+    top: 0;
+    left: 10px;
+}
+
+/* Animation pour faire tomber le cœur */
+@keyframes fall {
+    0% {
+        transform: translateY(-100px) rotate(-45deg); /* Position initiale (hors de l'écran) */
+    }
+    100% {
+        transform: translateY(100vh) rotate(-45deg); /* Position finale (bas de l'écran) */
+    }
+}
+
+/* Style de base pour le conteneur du mot */
+#wordContainer {
+    position: absolute;
+    bottom: 50%; /* Position de départ en bas */
+    left: 50%;
+    transform: translate(-50%, -50%);  /* Centrage */
+    font-size: 30px;
+    z-index: 1000;
+    display: flex; /* Pour aligner les lettres horizontalement */
+}
+
+/* Animation pour déplacer le mot vers le haut */
+.animate-word-up {
+    animation: moveUp 2s ease-out forwards;
+}
+
+/* Animation pour agrandir les lettres */
+.animate-letter-grow {
+    animation: growLetters 2s ease-out forwards;
+}
+
+/* Déplacement vers le haut */
+@keyframes moveUp {
+    from {
+        bottom: 50%;
+    }
+    to {
+        bottom: -50vh; /* Monte vers le haut de l'écran */
+    }
+}
+
+/* Animation pour doubler la taille des lettres */
+@keyframes growLetters {
+    from {
+        font-size: 35px;
+        bottom: -100vh;
+    }
+    to {
+        font-size: 100px; /* Double la taille */
+        bottom: 100vh;
+    }
+}
+
+#memory-game h2 {
+    text-align: center; /* Centre le titre horizontalement */
+    margin-bottom: 20px; /* Ajoute un espace en dessous pour plus de clarté */
+    color: #00FF00; /* Facultatif : donne une couleur au titre pour qu'il s'harmonise avec le design */
+}
+
+/* Styles pour centrer le jeu de mémoire */
+#memory-game {
+    position: absolute;  /* Permet de le positionner librement */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* Centrage */
+}
+
+/* Styles pour la grille */
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colonnes */
+    gap: 10px;
+}
+
+/* Styles des cartes */
+.memory-card {
+    width: 100px;
+    height: 100px;
+    background-color: #00ff00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+    cursor: pointer;
+    user-select: none; /* Empêche la sélection du texte */
+    border: 2px solid transparent;
+    position: relative; /* Nécessaire pour l'animation de retournement */
+    transform-style: preserve-3d; /* Permet de gérer les faces avant et arrière */
+    transition: transform 0.6s; /* Durée de l'animation de retournement */
+}
+
+.memory-card.revealed {
+    background-color: transparent; /* Supprime l'arrière-plan lorsqu'elle est révélée */
+    color: #00ff00;
+    transform: rotateY(180deg); /* Retourne la carte pour révéler l'ASCII */
+}
+
+/* Animation pour les faces de la carte */
+.memory-card .front,
+.memory-card .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Empêche la face cachée d'être visible */
+}
+
+.memory-card .front {
+    background-color: #00ff00; /* Face avant (le carré vert) */
+}
+
+.memory-card .back {
+    background-color: transparent; /* Rend le fond de la face arrière transparent */
+    transform: rotateY(180deg); /* Cache la face arrière jusqu'à retournement */
+}
+
+#endMessage {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    font-size: 24px;
+    color: #00FF00;
+    background-color: transparent;
+    padding: 20px;
+    border: none;
+    display: none; /* Caché par défaut */
+    z-index: 1000; /* Au-dessus des autres éléments */
+}
+
+#timer {
+    position: fixed; /* Pour le positionner en haut de l'écran */
+    top: 10px; /* Marge en haut */
+    left: 50%; /* Centrer horizontalement */
+    transform: translateX(-50%); /* Ajustement pour le centrer */
+    color: #00FF00; /* Couleur du texte */
+    font-size: 24px; /* Taille du texte */
+    z-index: 1000; /* Pour qu'il soit au-dessus des autres éléments */
+}
+
+@keyframes shrink {
+    0% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        opacity: 0;
+    }
+}
+
+.shrink {
+    animation: shrink 2s forwards; /* 0.5s est la durée de l'animation */
+}
+
+@keyframes unshrink {
+    0% {
+        transform: translate(-50%, -50%);
+        opacity: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}
+
+.unshrink {
+    animation: unshrink 2s forwards; /* 0.5s est la durée de l'animation */
+}
+
+@keyframes textshrink {
+    0% {
+        transform: translate(-50%, -20%);
+        font-size: 24px;
+    }
+    100% {
+        transform: translate(-50%, -20%);
+        opacity: 0px;
+    }
+}
+
+.textshrink {
+    animation: textshrink 1s forwards; /* 0.5s est la durée de l'animation */
+}
+
+@keyframes textunshrink {
+    0% {
+        transform: translate(-50%, -20%);
+        font-size: 0px;
+    }
+    100% {
+        transform: translate(-50%, -20%);
+        opacity: 24px;
+    }
+}
+
+.textunshrink {
+    animation: textunshrink 1s forwards; /* 0.5s est la durée de l'animation */
+}
+
+.removeTimerUp {
+    animation: removetimerup 1s forwards;
+}
+
+@keyframes removetimerup {
+    0% {
+        font-size: 30px;
+    }
+    100% {
+        font-size: 10px;
+    }
 }

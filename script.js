@@ -115,7 +115,7 @@ function startQuiz() {
                 const secondGradientOverlay = document.getElementById('secondGradientOverlay');
                 secondGradientOverlay.style.opacity = 1;
                 secondGradientOverlay.classList.add('come-up-grad')
-                startLevelTwo(); // Démarrer la création des lettres
+                startLevel3(1); // Démarrer la création des lettres
 
 
 
@@ -209,8 +209,8 @@ function printOutput(text) {
 
 const lettersContainer = document.getElementById('lettersContainer');
 const wordContainer = document.getElementById('wordContainer'); // Conteneur du mot à former
-const targetWord = "je t'aime"; // Le mot à former
-let formedWordArray = Array.from(targetWord).map(char => char === ' ' ? ' ' : ''); // Préremplir avec des espaces
+const targetWord = "Je "; // Le mot à former
+let formedWordArray = Array.from(""); // Préremplir avec des espaces
 let remainingLetters = targetWord.split(""); // Liste des lettres restantes à cliquer
 let clickedIndexes = new Set(); // Set pour suivre les index déjà cliqués
 
@@ -226,15 +226,13 @@ function createLetters() {
         setRandomPosition(letterElement); // Positionner les lettres aléatoirement
 
         // Vérifier si la lettre est un espace
-        if (letter === ' ') {
-            // Ajouter directement l'espace au conteneur du mot sans clic
-            formedWordArray[index] = ' '; // Mettre à jour le tableau formé
-            moveLetterToWordContainer(letterElement, letter, index); // Déplacer l'espace vers la bonne position
+        if (index === 2) {
+            clickedIndexes.add(index); // Marquer cet index comme déjà cliqué
+            moveLetterToWordContainer(letterElement, letter, index); // Déplacer directement la lettre
         }
 
-        // Événement de clic pour placer la lettre
+        // Événement de clic pour placer les autres lettres
         letterElement.onclick = () => {
-            // Vérifier si la lettre à cet index n'a pas déjà été cliquée
             if (!clickedIndexes.has(index)) {
                 clickedIndexes.add(index); // Marquer cet index comme cliqué
                 moveLetterToWordContainer(letterElement, letter, index); // Déplacer la lettre vers la bonne position
@@ -245,7 +243,7 @@ function createLetters() {
         animateLetter(letterElement); // Animer la lettre
     });
 
-    // Initialiser l'affichage du mot avec les espaces
+    // Initialiser l'affichage du mot avec la lettre "J" déjà en place
     updateWordDisplay();
 }
 
@@ -303,14 +301,32 @@ function updateWordDisplay() {
     // Ajouter chaque lettre formée ou un espace si la lettre est déjà à sa place
     formedWordArray.forEach((letter) => {
         const letterElement = document.createElement('span');
-        letterElement.textContent = letter; // Afficher la lettre ou l'espace
+        if (letter === ' ') {
+            letterElement.innerHTML = '&nbsp;'; // Affiche un espace insécable
+        } else {
+            letterElement.textContent = letter; // Affiche la lettre
+        }
         letterElement.classList.add('letterInPlace'); // Classe pour le style
 
         // Ajouter chaque lettre (ou espace) au conteneur du mot
         wordContainer.appendChild(letterElement);
     });
+
+    // Vérifier si le mot est entièrement formé
+    if (formedWordArray.join('') === targetWord) {
+        displayHeartRain(); // Afficher le coeur quand le mot est complété
+        startJeTaimeAnimation(); // Lancer l'animation du mot "je t'aime"
+    }
 }
 
+// Fonction pour animer "je t'aime"
+function startJeTaimeAnimation() {
+    wordContainer.classList.add('animate-word-up'); // Déplacer vers le haut
+    wordContainer.querySelectorAll('.letterInPlace').forEach((letter) => {
+        letter.classList.add('animate-letter-grow'); // Animer la taille des lettres
+        letter.classList.add('animate-word-up');
+    });
+}
 
 // Fonction pour positionner aléatoirement les lettres
 function setRandomPosition(letterElement) {
@@ -357,5 +373,318 @@ function animateLetter(letterElement) {
 
 // Appelez cette fonction pour créer et animer les lettres après le niveau 2
 function startLevelTwo() {
+    const secondGradientOverlay = document.getElementById('secondGradientOverlay');
+    secondGradientOverlay.classList.add('goodbye-grad')
+    const thirdGradientOverlay = document.getElementById('thirdGradientOverlay');
+    thirdGradientOverlay.style.opacity = 1;
+    thirdGradientOverlay.classList.add('come-up-grad');
     createLetters(); // Créer et animer les lettres
+}
+
+// Fonction pour afficher un cœur
+function displayHeart() {
+    // Créer un élément pour le cœur
+    const heartElement = document.createElement('div');
+    heartElement.classList.add('heart');
+    
+    // Positionner le cœur au centre de l'écran
+    heartElement.style.position = 'fixed';
+    heartElement.style.left = '50%';
+    heartElement.style.top = '50%';
+    heartElement.style.transform = 'translate(-50%, -50%)'; // Centrer
+    heartElement.style.width = '100px';
+    heartElement.style.height = '90px';
+    heartElement.style.backgroundColor = 'red';
+
+    // Ajouter le cœur au body
+    document.body.appendChild(heartElement);
+
+    // Lancer l'animation
+    heartElement.classList.add('animate-heart');
+
+    // Optionnel : ajouter une transition de disparition après un certain temps
+    setTimeout(() => {
+        heartElement.style.opacity = '0';
+        heartElement.style.transition = 'opacity 2s';
+    }, 3000); // Disparaît après 3 secondes
+}
+
+// Fonction pour afficher une pluie de cœurs
+function displayHeartRain() {
+    // Générer plusieurs cœurs
+    const heartCount = 50;  // Nombre de cœurs à afficher
+    for (let i = 0; i < heartCount; i++) {
+        createFallingHeart();
+    }
+}
+
+// Fonction pour créer un cœur qui tombe
+function createFallingHeart() {
+    const heartElement = document.createElement('div');
+    heartElement.classList.add('falling-heart');
+    
+    // Positionner chaque cœur aléatoirement sur l'axe X
+    heartElement.style.left = Math.random() * 100 + 'vw'; // Position horizontale aléatoire
+    heartElement.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Durée aléatoire pour la chute
+
+    // Ajouter le cœur au body
+    document.body.appendChild(heartElement);
+
+    // Supprimer le cœur après qu'il soit tombé en bas
+    heartElement.addEventListener('animationend', () => {
+        heartElement.remove(); // Enlever l'élément une fois l'animation terminée
+    });
+}
+
+const asciiShapes = [
+    `+---+\n|   |\n+---+`, // Square
+    `   /\\\n  /  \\\n /____\\`, // Triangle
+    ` /---\\\n(     )\n \\---/`,  // Circle
+    `*******\n***\n*******`,
+    `uuuuu\ndddd\nuuuuuu`,
+    `yyyyyyy\njjjj\npppp`,
+    `ttttttt\nooooo\nccccc`,
+    `------\$$$$$\n------`,
+];
+
+let gameCards = [];
+let firstCard = null;
+let secondCard = null;
+let lockBoard = false;
+
+function createMemoryGame(numPairs) {
+    const pairs = [...asciiShapes.slice(0, numPairs), ...asciiShapes.slice(0, numPairs)];
+    pairs.sort(() => 0.5 - Math.random());
+
+    const memoryGrid = document.getElementById('memoryGrid');
+    memoryGrid.innerHTML = ''; // Clear any existing content
+
+    pairs.forEach((shape, index) => {
+        const card = document.createElement('div');
+        card.classList.add('memory-card');
+        card.setAttribute('data-shape', shape);
+        card.setAttribute('data-index', index);
+
+        // Face avant (cachée au départ)
+        const front = document.createElement('div');
+        front.classList.add('front');
+        front.innerHTML = ''; // Vide à l'affichage initial
+
+        // Face arrière (révèle la forme ASCII)
+        const back = document.createElement('div');
+        back.classList.add('back');
+        back.innerHTML = shape;
+
+        card.appendChild(front);
+        card.appendChild(back);
+
+        card.addEventListener('click', handleCardClick);
+        memoryGrid.appendChild(card);
+    });
+
+    gameCards = document.querySelectorAll('.memory-card');
+}
+
+function handleCardClick() {
+    if (lockBoard) return;
+    const clickedCard = this;
+
+    // Révèle la carte cliquée
+    clickedCard.classList.add('revealed');
+
+    // Première carte sélectionnée
+    if (!firstCard) {
+        firstCard = clickedCard;
+        return;
+    }
+
+    // Deuxième carte sélectionnée
+    secondCard = clickedCard;
+    lockBoard = true;
+
+    // Compare les deux cartes
+    if (firstCard.getAttribute('data-shape') === secondCard.getAttribute('data-shape')) {
+        firstCard.removeEventListener('click', handleCardClick);
+        secondCard.removeEventListener('click', handleCardClick);
+        resetBoard();
+    } else {
+        // Cache les cartes après un délai si elles ne correspondent pas
+        setTimeout(() => {
+            firstCard.classList.remove('revealed');
+            secondCard.classList.remove('revealed');
+            resetBoard();
+        }, 800);
+    }
+    checkIfGameIsFinished();
+}
+
+function resetBoard() {
+    [firstCard, secondCard, lockBoard] = [null, null, false];
+}
+
+// Démarrage du jeu de mémoire
+function startLevel3(numPairs) {
+    document.getElementById('memory-game').style.display = 'block';
+    document.getElementById('memory-game').classList.add('slide-fromdown-center');
+    createMemoryGame(numPairs);
+    startTimer();
+}
+
+// Fonction pour vérifier si le jeu est terminé
+async function checkIfGameIsFinished() {
+    // Sélectionne toutes les cartes
+    const cards = document.querySelectorAll('.memory-card');
+    
+    // Vérifie si toutes les cartes sont révélées
+    const allRevealed = Array.from(cards).every(card => card.classList.contains('revealed'));
+    
+    // Si toutes les cartes sont révélées, affiche le message de fin
+    if (allRevealed) {
+        clearInterval(timer); // Met le timer en pause
+        timerRunning = false; // Met à jour l'état du timer
+        await showMessage();
+        resetGame();
+    }
+}
+
+function showMessage() {
+    return new Promise((resolve) => { // Retourne une promesse
+        const endMessage = document.getElementById('endMessage');  // Affiche le message de fin
+        endMessage.style.display = 'block';
+        
+        endMessage.classList.add('textunshrink');
+
+        // Écoute l'événement de fin d'animation pour commencer la première animation
+        endMessage.addEventListener('animationend', firstAnimation);
+
+        function firstAnimation() {
+            endMessage.classList.remove('textunshrink');
+            endMessage.classList.add('textshrink'); // Démarre la première animation de rétrécissement
+
+            endMessage.addEventListener('animationend', secondAnimation); // Écoute l'animation de rétrécissement
+        }
+
+        function secondAnimation() {
+            endMessage.innerText = "C'était facile"; // Change le texte
+            endMessage.classList.remove('textshrink');
+            endMessage.classList.add('textunshrink'); // Démarre la deuxième animation d'agrandissement
+
+            endMessage.addEventListener('animationend', thirdAnimation); // Écoute l'animation d'agrandissement
+        }
+
+        function thirdAnimation() {
+            endMessage.classList.remove('textunshrink');
+            endMessage.classList.add('textshrink'); // Démarre la troisième animation de rétrécissement
+
+            endMessage.addEventListener('animationend', fourthAnimation); // Écoute l'animation de rétrécissement
+        }
+
+        function fourthAnimation() {
+            endMessage.innerText = "Recommençons"; // Change le texte
+            endMessage.classList.remove('textshrink');
+            endMessage.classList.add('textunshrink'); // Démarre la quatrième animation d'agrandissement
+
+            endMessage.addEventListener('animationend', fifthAnimation); // Écoute l'animation d'agrandissement
+        }
+
+        function fifthAnimation() {
+            endMessage.classList.remove('textunshrink');
+            endMessage.classList.add('textshrink'); // Démarre la cinquième animation de rétrécissement
+
+            endMessage.addEventListener('animationend', () => {
+                endMessage.style.display = 'none'; // Masque le message à la fin de l'animation
+                resolve(); // Résout la promesse après la dernière animation
+            });
+        }
+    });
+}
+
+
+let timer; // Variable pour le timer
+let timeLeft = 5; // Durée du jeu en secondes
+let timerRunning = false; // Pour savoir si le timer est en cours
+
+// Fonction pour démarrer le timer
+function startTimer() {
+    if (!timerRunning) {
+        timerRunning = true; // Indique que le timer est en cours
+        timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = `Temps restant : ${timeLeft}s`; // Mise à jour du texte du timer
+            document.getElementById('timer').style.display = 'block'; // Mise à jour du texte du timer
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer); // Arrête le timer
+                timerRunning = false;
+                //disableCards(); // Désactive les cartes
+                moveGameAway();
+                startLevelTwo();
+            }
+        }, 1000); // Met à jour toutes les secondes
+    }
+}
+
+function moveGameAway(){
+    const theTimer = document.getElementById('timer');
+    theTimer.classList.add('slide-up');
+    const memorygame = document.getElementById('memory-game');
+    memorygame.classList.remove('shrink');
+    memorygame.classList.remove('unshrink');
+    memorygame.classList.add('slide-up-center');
+}
+
+// Fonction pour désactiver les cartes
+function disableCards() {
+    document.querySelectorAll('.memory-card').forEach(card => {
+        card.removeEventListener('click', cardClickHandler); // Enlève l'écouteur de clic
+        card.style.pointerEvents = 'none'; // Désactive les clics sur les cartes
+    });
+}
+
+function resetTimer() {
+    timeLeft = 5; // Réinitialise le temps à 10 secondes
+    document.getElementById('timer').textContent = `Temps restant: ${timeLeft}s`; // Mettez à jour l'affichage du timer
+}
+
+function resetGame() {
+    // Masquer le jeu de mémoire
+    hideGame();    // Réinitialiser les cartes
+    setTimeout(() => {
+        gameCards.forEach(card => {
+            card.classList.remove('revealed');
+            card.removeEventListener('click', handleCardClick);
+        });
+        // Réinitialiser les variables
+        firstCard = null;
+        secondCard = null;
+        lockBoard = false;
+        timeLeft = 10; // Réinitialise le temps à 10 secondes
+        resetTimer();
+        startLevel3(8);
+        showGame();
+    }, 2000);
+}
+
+function hideGame() {
+    const memoryGame = document.getElementById('memory-game');
+    
+    // Ajoute la classe shrink pour démarrer l'animation
+    memoryGame.classList.add('shrink');
+
+    // Attendre la fin de l'animation avant de masquer l'élément
+    // memoryGame.addEventListener('animationend', () => {
+    //     memoryGame.style.display = 'none'; // Masquer complètement l'élément après l'animation
+    // });
+}
+
+function showGame() {
+    const memoryGame = document.getElementById('memory-game');
+    
+    // Ajoute la classe shrink pour démarrer l'animation
+    memoryGame.classList.add('unshrink');
+
+    // Attendre la fin de l'animation avant de masquer l'élément
+    // memoryGame.addEventListener('animationend', () => {
+    //     memoryGame.style.display = 'none'; // Masquer complètement l'élément après l'animation
+    // });
 }
