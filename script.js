@@ -115,7 +115,7 @@ function startQuiz() {
                 const secondGradientOverlay = document.getElementById('secondGradientOverlay');
                 secondGradientOverlay.style.opacity = 1;
                 secondGradientOverlay.classList.add('come-up-grad')
-                startLevel3(1); // Démarrer la création des lettres
+                startLevel2(1); // Démarrer la création des lettres
 
 
 
@@ -319,14 +319,45 @@ function updateWordDisplay() {
     }
 }
 
-// Fonction pour animer "je t'aime"
 function startJeTaimeAnimation() {
     wordContainer.classList.add('animate-word-up'); // Déplacer vers le haut
     wordContainer.querySelectorAll('.letterInPlace').forEach((letter) => {
         letter.classList.add('animate-letter-grow'); // Animer la taille des lettres
         letter.classList.add('animate-word-up');
     });
+    const thirdGradientOverlay = document.getElementById('thirdGradientOverlay');
+    thirdGradientOverlay.classList.add('goodbye-grad');
+    const endGradientOverlay = document.getElementById('endGradientOverlay');
+    endGradientOverlay.style.opacity = 1;
+    endGradientOverlay.classList.add('come-up-grad');
+
+    // Remplace les retours à la ligne par <br> pour le texte
+    let text = "Texte censuré. Encore un coup de Macron.<br>J'ai fait cette modification avant de te l'envoyer,<br>je pense que tu comprends pourquoi c'était nécessaire";
+    let i = 0;
+    const letter = document.getElementById('letter');
+
+    const scrollText = setInterval(function() {
+        if (i < text.length) {
+            // Ajoute une lettre ou un <br> selon le caractère
+            if (text.charAt(i) === '<') {
+                // Si on trouve un <, on lit jusqu'à > pour ne pas afficher le tag, juste ajouter une ligne
+                while (text.charAt(i) !== '>') {
+                    i++;
+                }
+                // On avance d'une position pour passer le >
+                i++;
+                // On insère un retour à la ligne
+                letter.innerHTML += '<br>';
+            } else {
+                letter.innerHTML += text.charAt(i);
+                i++;
+            }
+        } else {
+            clearInterval(scrollText);
+        }
+    }, 30); // Vitesse du texte défilant
 }
+
 
 // Fonction pour positionner aléatoirement les lettres
 function setRandomPosition(letterElement) {
@@ -372,13 +403,42 @@ function animateLetter(letterElement) {
 }
 
 // Appelez cette fonction pour créer et animer les lettres après le niveau 2
-function startLevelTwo() {
+function startFinal() {
     const secondGradientOverlay = document.getElementById('secondGradientOverlay');
     secondGradientOverlay.classList.add('goodbye-grad')
     const thirdGradientOverlay = document.getElementById('thirdGradientOverlay');
     thirdGradientOverlay.style.opacity = 1;
     thirdGradientOverlay.classList.add('come-up-grad');
     createLetters(); // Créer et animer les lettres
+    // Attendre 10 secondes après la fin de createLetters
+    setTimeout(() => {
+        fadeToBlack(); // Affiche l'écran noir avec le cœur rouge
+    }, 10000); // 10000 millisecondes = 10 secondes
+}
+
+function fadeToBlack() {
+    // Créer un élément pour l'écran noir
+    const heartScreen = document.createElement('div');
+    heartScreen.id = 'heartScreen'; // Ajouter un ID pour le styliser
+    heartScreen.style.opacity = 0; // Commencer transparent
+    document.body.appendChild(heartScreen); // Ajouter à la page
+
+    // Transition pour assombrir l'écran
+    setTimeout(() => {
+        heartScreen.classList.add("fade");
+    }, 10000); // Petite attente pour appliquer la transition
+
+    // Attendre 2 secondes après que l'écran soit devenu noir pour afficher le cœur
+    setTimeout(() => {
+        showHeart(); // Affiche le cœur
+    }, 16000); // 2000 millisecondes = 2 secondes
+}
+
+function showHeart() {
+    // Créer un élément pour le cœur
+    const heart = document.createElement('div');
+    heart.id = 'bigHeart';
+    document.getElementById('heartScreen').appendChild(heart); // Ajouter le cœur à l'écran noir
 }
 
 // Fonction pour afficher un cœur
@@ -437,7 +497,7 @@ function createFallingHeart() {
 }
 
 const asciiShapes = [
-    `+---+\n|   |\n+---+`, // Square
+    `+-<br>|   |<br>+---+`, // Square
     `   /\\\n  /  \\\n /____\\`, // Triangle
     ` /---\\\n(     )\n \\---/`,  // Circle
     `*******\n***\n*******`,
@@ -523,7 +583,7 @@ function resetBoard() {
 }
 
 // Démarrage du jeu de mémoire
-function startLevel3(numPairs) {
+function startLevel2(numPairs) {
     document.getElementById('memory-game').style.display = 'block';
     document.getElementById('memory-game').classList.add('slide-fromdown-center');
     createMemoryGame(numPairs);
@@ -599,6 +659,58 @@ function showMessage() {
     });
 }
 
+function showMessage2(){
+    return new Promise((resolve) => { // Retourne une promesse
+        const endMessage = document.getElementById('endMessage2');  // Affiche le message de fin
+        endMessage.style.display = 'block';
+        
+        endMessage.classList.add('textunshrink');
+
+        // Écoute l'événement de fin d'animation pour commencer la première animation
+        endMessage.addEventListener('animationend', firstAnimation);
+
+        function firstAnimation() {
+            endMessage.classList.remove('textunshrink');
+            endMessage.classList.add('textshrink'); // Démarre la première animation de rétrécissement
+
+            endMessage.addEventListener('animationend', secondAnimation); // Écoute l'animation de rétrécissement
+        }
+
+        function secondAnimation() {
+            endMessage.innerText = "Tu es donc bien Clara"; // Change le texte
+            endMessage.classList.remove('textshrink');
+            endMessage.classList.add('textunshrink'); // Démarre la deuxième animation d'agrandissement
+
+            endMessage.addEventListener('animationend', thirdAnimation); // Écoute l'animation d'agrandissement
+        }
+
+        function thirdAnimation() {
+            endMessage.classList.remove('textunshrink');
+            endMessage.classList.add('textshrink'); // Démarre la troisième animation de rétrécissement
+
+            endMessage.addEventListener('animationend', fourthAnimation); // Écoute l'animation de rétrécissement
+        }
+
+        function fourthAnimation() {
+            endMessage.innerText = "J'ai un message pour toi"; // Change le texte
+            endMessage.classList.remove('textshrink');
+            endMessage.classList.add('textunshrink'); // Démarre la quatrième animation d'agrandissement
+
+            endMessage.addEventListener('animationend', fifthAnimation); // Écoute l'animation d'agrandissement
+        }
+
+        function fifthAnimation() {
+            endMessage.classList.remove('textunshrink');
+            endMessage.classList.add('textshrink'); // Démarre la cinquième animation de rétrécissement
+
+            endMessage.addEventListener('animationend', () => {
+                endMessage.style.display = 'none'; // Masque le message à la fin de l'animation
+                resolve(); // Résout la promesse après la dernière animation
+            });
+        }
+    });
+}
+
 
 let timer; // Variable pour le timer
 let timeLeft = 5; // Durée du jeu en secondes
@@ -618,10 +730,15 @@ function startTimer() {
                 timerRunning = false;
                 //disableCards(); // Désactive les cartes
                 moveGameAway();
-                startLevelTwo();
+                startLevelThree();
             }
         }, 1000); // Met à jour toutes les secondes
     }
+}
+
+async function startLevelThree(){
+    await showMessage2();
+    startFinal();
 }
 
 function moveGameAway(){
@@ -660,7 +777,7 @@ function resetGame() {
         lockBoard = false;
         timeLeft = 10; // Réinitialise le temps à 10 secondes
         resetTimer();
-        startLevel3(8);
+        startLevel2(8);
         showGame();
     }, 2000);
 }

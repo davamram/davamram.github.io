@@ -55,6 +55,19 @@ body {
     pointer-events: none;  /* Empêche d'interagir avec cet élément */
 }
 
+#endGradientOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #ff66cc, #ff66cc);  /* Le dégradé */
+    opacity: 0;  /* On commence avec une opacité à 0 */
+    /* transition: opacity 1s ease-in-out;  /* Transition fluide de 1 secondes */
+    transform: translateY(100vh);
+    pointer-events: none;  /* Empêche d'interagir avec cet élément */
+}
+
 #terminal {
     width: 80%;
     height: auto;
@@ -482,6 +495,31 @@ to {
     z-index: 1000; /* Au-dessus des autres éléments */
 }
 
+#endMessage2 {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -20%);
+    font-size: 24px;
+    color: #00FF00;
+    background-color: transparent;
+    padding: 20px;
+    border: none;
+    display: none; /* Caché par défaut */
+    z-index: 1000; /* Au-dessus des autres éléments */
+}
+
+#letter {
+    position: absolute;
+    color: #f2f2f2a8;
+    top: 40%;
+    left: 10%;
+    right: 10%;
+    font-size: 24px;
+    display: block;
+    text-align: center; /* Centre le texte */
+}
+
 #timer {
     position: fixed; /* Pour le positionner en haut de l'écran */
     top: 10px; /* Marge en haut */
@@ -563,4 +601,57 @@ to {
     100% {
         font-size: 10px;
     }
+}
+
+#heartScreen {
+    position: fixed; /* Reste en place même en scrollant */
+    top: 0;
+    left: 0;
+    width: 100%; /* Prend toute la largeur */
+    height: 100%; /* Prend toute la hauteur */
+    background-color: black; /* Fond noir */
+    display: flex; /* Utiliser flexbox pour centrer le cœur */
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+    z-index: 9999; /* S'assure qu'il est au-dessus des autres éléments */
+}
+
+#bigHeart {
+    --c: red;
+    width: 500px;
+    aspect-ratio: 1;
+    background:
+     /* 1 */ radial-gradient(circle at 60% 65%,var(--c) 64%,#0000 65%) top left/50% 50%,
+     /* 2 */ radial-gradient(circle at 40% 65%,var(--c) 64%,#0000 65%) top right/50% 50%,
+     /* 3 */ conic-gradient(from -45deg at 50% 85.5%,var(--c) 90deg,#0000 0) bottom/100% 50%;
+    background-repeat: no-repeat;
+    animation: trueUnShrink 2s forwards;
+  }
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.fade {
+    animation: fade 5s forwards;
+}
+
+@keyframes trueUnShrink {
+    0% {
+        transform: translate(-50%, -50%);
+        scale: 0;
+    }
+    100% {
+        transform: translate(-50%, -50%);
+        scale: 1;
+    }
+}
+
+.trueUnShrink {
+    animation: trueUnShrink 2s forwards; /* 0.5s est la durée de l'animation */
 }
