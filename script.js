@@ -13,7 +13,7 @@ const wordGrid = document.getElementById('wordGrid'); // Grille des mots
 const alternativePhrases = [
     "Qu'est-ce qu'elle raconte la yakak là",
     "Hein ?",
-    "Elle est pute ou quoi cette conne, je suis juste un ordi je ne comprends pas",
+    "Elle est pute ou quoi cette conne ? Je suis juste un ordi, je ne comprends pas tout ce que tu racontes",
     "Elle va la fermer celle là",
     "Tais toi pour voir. Ouais c'est mieux",
     "T'as pas d'autres idées ? Parce que ça, c'est nul.",
@@ -258,7 +258,7 @@ function printOutput(text) {
 
 const lettersContainer = document.getElementById('lettersContainer');
 const wordContainer = document.getElementById('wordContainer'); // Conteneur du mot à former
-const targetWord = "Je "; // Le mot à former
+const targetWord = "Joyeux anniversaire"; // Le mot à former
 let formedWordArray = Array.from(""); // Préremplir avec des espaces
 let remainingLetters = targetWord.split(""); // Liste des lettres restantes à cliquer
 let clickedIndexes = new Set(); // Set pour suivre les index déjà cliqués
@@ -275,7 +275,7 @@ function createLetters() {
         setRandomPosition(letterElement); // Positionner les lettres aléatoirement
 
         // Vérifier si la lettre est un espace
-        if (index === 2) {
+        if (index === 6) {
             clickedIndexes.add(index); // Marquer cet index comme déjà cliqué
             moveLetterToWordContainer(letterElement, letter, index); // Déplacer directement la lettre
         }
@@ -553,7 +553,7 @@ function displayHeart() {
 // Fonction pour afficher une pluie de cœurs
 function displayHeartRain() {
     // Générer plusieurs cœurs
-    const heartCount = 50;  // Nombre de cœurs à afficher
+    const heartCount = 100;  // Nombre de cœurs à afficher
     for (let i = 0; i < heartCount; i++) {
         createFallingHeart();
     }
@@ -798,7 +798,7 @@ function showMessage2(){
 
 
 let timer; // Variable pour le timer
-let timeLeft = 30; // Durée du jeu en secondes
+let timeLeft = 120; // Durée du jeu en secondes
 let timerRunning = false; // Pour savoir si le timer est en cours
 
 // Fonction pour démarrer le timer
@@ -939,12 +939,12 @@ function printGift() {
     (async function displaySequence() {
         await showMessage("Encore là ?", 2000);        // Affiche pendant 2 secondes
         await showMessage("Voilà ton cadeau", 2000);   // Affiche pendant 2 secondes
-        await showMessage("83199910", 1000000);
+        await showMessage("83199910", 10000000);
     })();
 }
 
 // Date cible pour le compte à rebours : 10 novembre 2024 à 1h00 du matin (UTC)
-const targetDate = new Date('2024-11-04T01:00:00Z');
+const targetDate = new Date('2024-11-10T01:00:00Z');
 
 function updateCountdown() {
     const now = new Date(); // Heure actuelle
