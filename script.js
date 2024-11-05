@@ -10,10 +10,31 @@ const quizContainer = document.getElementById('quizContainer'); // Conteneur du 
 const quizQuestion = document.getElementById('quizQuestion'); // Question du quiz
 const wordGrid = document.getElementById('wordGrid'); // Grille des mots
 
+const alternativePhrases = [
+    "Qu'est-ce qu'elle raconte la yakak là",
+    "Hein ?",
+    "Elle est pute ou quoi cette conne, je suis juste un ordi je ne comprends pas",
+    "Elle va la fermer celle là",
+    "Tais toi pour voir. Ouais c'est mieux",
+    "T'as pas d'autres idées ? Parce que ça, c'est nul.",
+    "Et là, tu attends quoi de moi ?",
+    "Qu'est-ce que tu veux que je fasse avec ça, exactement ?",
+    "On est d'accord que ça ne mène nulle part, non ?",
+    "J'espère que tu as une meilleure idée que ça.",
+    "T'as vraiment cru que ça allait marcher ?",
+    "Encore une de tes brillantes idées, j'imagine ?",
+    "Tu veux un bon conseil ? C’est pas ça.",
+    "Je parie que ça a l'air mieux dans ta tête.",
+    "Tu as vraiment pensé à ça, ou c'est juste sorti comme ça ?"
+];
+
+let usedPhrases = [];
+
+
 
 // Commandes disponibles
 const commands = {
-    "help": "Commandes disponibles: clara, help, clear, quiz",
+    "help": "Help ? Vraiment ? Tu pensais t'en tirer comme ça ?",
     "clear": function() {
         outputDiv.innerHTML = '';
         body.style.background = "black";  // Réinitialiser la couleur de fond du body à noir
@@ -25,9 +46,13 @@ const commands = {
         displayRomanticMessage();
         promptLine.textContent = "Niveau 1";
     },
-    "quiz": function() {
+    "quizxxxxxxx": function() {
         startQuiz();
-    }
+    },
+    "raclette": function() {
+        fadeToBlack();
+    },
+    "je t'aime": "Moi aussi je t'aime mon mimi"
 };
 
 // Gestion de l'input de l'utilisateur
@@ -39,8 +64,28 @@ inputField.addEventListener('keydown', function(e) {
     }
 });
 
+function getRandomPhrase() {
+    if (usedPhrases.length == alternativePhrases.length) {
+        printOutput("Allez, c'est bon, tu m'as saoulé, je me tais."); // Message de fatigue
+        usedPhrases.push(1);
+        return null; // Aucun retour
+    }
+    if (usedPhrases.length >= alternativePhrases.length) {
+        return null; // Aucun retour
+    }
+    
+    let randomIndex;
+    do {
+        randomIndex = Math.floor(Math.random() * alternativePhrases.length);
+    } while (usedPhrases.includes(randomIndex));
+
+    usedPhrases.push(randomIndex); // Marquer cette phrase comme utilisée
+    return alternativePhrases[randomIndex]; // Retourner la phrase
+}
+
 // Traiter la commande saisie par l'utilisateur
-function processCommand(command) {
+function processCommand(inputCommand) {
+    const command = inputCommand.trim();
     if (commands[command]) {
         if (typeof commands[command] === "function") {
             commands[command](); // Exécute la fonction associée
@@ -48,13 +93,17 @@ function processCommand(command) {
             printOutput(commands[command]);
         }
     } else {
-        printOutput("Commande non reconnue. Tape 'help' pour voir la liste des commandes.");
+        const phrase = getRandomPhrase(); // Obtenir une phrase aléatoire
+        if (phrase) {
+            printOutput(phrase); // Affiche la phrase si elle existe
+        }
     }
 }
 
 // Affichage du message romantique pour la commande 'clara'
 function displayRomanticMessage() {
     // Ajouter du texte romantique qui défile
+    outputDiv.innerHTML = '';
     let text = "C'est bien toi que j'attendais";
     let i = 0;
 
@@ -85,10 +134,10 @@ function startQuiz() {
     quizQuestion.textContent = "Choisis un mot parmi les suivants :"; // Question du quiz
 
     const words = [
-        "amour", "espoir", "rêve", "lumière",
-        "ciel", "étoile", "passion", "coeur",
-        "joie", "sourire", "souvenir", "fantaisie",
-        "poésie", "mer", "fleur", "musique"
+        "patate", "carambolage", "hippopotame", "salsifis",
+        "canapé", "brouhaha", "oléoduc", "parapluie",
+        "trombone", "gribouillage", "farfelu", "zébu",
+        "abracadabra", "cacahuète", "balustrade", "nénuphar"
     ];
 
     // Mélanger les mots
@@ -103,7 +152,7 @@ function startQuiz() {
         wordElement.textContent = word;
         wordElement.classList.add('word'); // Ajouter la classe pour le style
         wordElement.onclick = () => {
-            if (word === "fantaisie") {
+            if (word === "oléoduc") {
                 // Déplacer le terminal et afficher un nouveau terminal
                 terminal.classList.add('slide-up'); // Ajouter la classe pour faire glisser le terminal vers le haut
                 quizContainer.classList.add('slide-up-center');
@@ -115,7 +164,7 @@ function startQuiz() {
                 const secondGradientOverlay = document.getElementById('secondGradientOverlay');
                 secondGradientOverlay.style.opacity = 1;
                 secondGradientOverlay.classList.add('come-up-grad')
-                startLevel2(1); // Démarrer la création des lettres
+                startLevel2(4); // Démarrer la création des lettres
 
 
 
@@ -301,6 +350,7 @@ function updateWordDisplay() {
     // Ajouter chaque lettre formée ou un espace si la lettre est déjà à sa place
     formedWordArray.forEach((letter) => {
         const letterElement = document.createElement('span');
+        letterElement.style.color = 'red';
         if (letter === ' ') {
             letterElement.innerHTML = '&nbsp;'; // Affiche un espace insécable
         } else {
@@ -356,6 +406,10 @@ function startJeTaimeAnimation() {
             clearInterval(scrollText);
         }
     }, 30); // Vitesse du texte défilant
+    // Attendre 10 secondes après la fin de createLetters
+    setTimeout(() => {
+        fadeToBlack(); // Affiche l'écran noir avec le cœur rouge
+    }, 10000); // 10000 millisecondes = 10 secondes
 }
 
 
@@ -410,10 +464,6 @@ function startFinal() {
     thirdGradientOverlay.style.opacity = 1;
     thirdGradientOverlay.classList.add('come-up-grad');
     createLetters(); // Créer et animer les lettres
-    // Attendre 10 secondes après la fin de createLetters
-    setTimeout(() => {
-        fadeToBlack(); // Affiche l'écran noir avec le cœur rouge
-    }, 10000); // 10000 millisecondes = 10 secondes
 }
 
 function fadeToBlack() {
@@ -426,20 +476,51 @@ function fadeToBlack() {
     // Transition pour assombrir l'écran
     setTimeout(() => {
         heartScreen.classList.add("fade");
-    }, 10000); // Petite attente pour appliquer la transition
+    }, 1000); // Petite attente pour appliquer la transition
 
     // Attendre 2 secondes après que l'écran soit devenu noir pour afficher le cœur
     setTimeout(() => {
         showHeart(); // Affiche le cœur
-    }, 16000); // 2000 millisecondes = 2 secondes
+    }, 5000); // 2000 millisecondes = 2 secondes
 }
 
-function showHeart() {
+async function showHeart() {
     // Créer un élément pour le cœur
     const heart = document.createElement('div');
     heart.id = 'bigHeart';
     document.getElementById('heartScreen').appendChild(heart); // Ajouter le cœur à l'écran noir
+
+    // Lancer l'animation de grandissement de 0 à 1
+    await new Promise((resolve) => {
+        setTimeout(() => {
+            heart.style.transform = 'translate(-50%, -50%) scale(1)'; // Appliquer le grandissement
+            resolve(); // Résoudre la promesse lorsque l'animation commence
+        }, 50);
+    });
+
+    await new Promise((resolve) => {
+        setTimeout(() => {
+            resolve(); // Attendre 2 secondes avant de passer à l'échelle suivante
+        }, 20000); // Ajustez ce délai si nécessaire
+    });
+
+    // Attendre 2 secondes pour que l'animation soit visible
+    await new Promise((resolve) => {
+        setTimeout(() => {
+            heart.style.transform = 'translate(-50%, -50%) scale(10)'; // Appliquer le grandissement à 10
+            resolve();
+        }, 20000);
+    });
+
+    // Attendre avant d'appeler printGift
+    await new Promise((resolve) => {
+        setTimeout(() => {
+            printGift(); // Appel à printGift
+            resolve();
+        }, 2000);
+    });
 }
+
 
 // Fonction pour afficher un cœur
 function displayHeart() {
@@ -487,6 +568,9 @@ function createFallingHeart() {
     heartElement.style.left = Math.random() * 100 + 'vw'; // Position horizontale aléatoire
     heartElement.style.animationDuration = (Math.random() * 3 + 2) + 's'; // Durée aléatoire pour la chute
 
+    const isInFront = Math.random() < 0.5; // 50% de chance d'être devant
+    heartElement.style.zIndex = isInFront ? '1001' : '999'; // Définir z-index
+
     // Ajouter le cœur au body
     document.body.appendChild(heartElement);
 
@@ -497,13 +581,14 @@ function createFallingHeart() {
 }
 
 const asciiShapes = [
-    `+-<br>|   |<br>+---+`, // Square
-    `   /\\\n  /  \\\n /____\\`, // Triangle
-    ` /---\\\n(     )\n \\---/`,  // Circle
-    `*******\n***\n*******`,
-    `uuuuu\ndddd\nuuuuuu`,
-    `yyyyyyy\njjjj\npppp`,
-    `ttttttt\nooooo\nccccc`,
+    `jtmjtm<br>jtmjtm<br>jtmjtm`,
+    `#-#-#-#<br>-#-#-#-<br>#-#-#-#`,
+    `[]..[]<br>..[]..<br>------`,
+    `oooo<br>ooo<br>oo`,
+    ` /---\\\n\n \\---/`,  // Weird
+    `____<br>\\../<br>.\\/`, // Triangle
+    `._____<br>|....|<br>|____|`, // Square
+    `----<br>--<br>----`, //E
     `------\$$$$$\n------`,
 ];
 
@@ -713,7 +798,7 @@ function showMessage2(){
 
 
 let timer; // Variable pour le timer
-let timeLeft = 5; // Durée du jeu en secondes
+let timeLeft = 30; // Durée du jeu en secondes
 let timerRunning = false; // Pour savoir si le timer est en cours
 
 // Fonction pour démarrer le timer
@@ -759,7 +844,7 @@ function disableCards() {
 }
 
 function resetTimer() {
-    timeLeft = 5; // Réinitialise le temps à 10 secondes
+    timeLeft = 30; // Réinitialise le temps à 10 secondes
     document.getElementById('timer').textContent = `Temps restant: ${timeLeft}s`; // Mettez à jour l'affichage du timer
 }
 
@@ -805,3 +890,94 @@ function showGame() {
     //     memoryGame.style.display = 'none'; // Masquer complètement l'élément après l'animation
     // });
 }
+
+function printGift() {
+    // Supprime tout le contenu de la page
+    document.body.innerHTML = '';
+
+    // Crée un nouvel élément pour l'écran rouge
+    const redScreen = document.createElement('div');
+    redScreen.style.position = 'fixed';
+    redScreen.style.top = '0';
+    redScreen.style.left = '0';
+    redScreen.style.width = '100%';
+    redScreen.style.height = '100%';
+    redScreen.style.backgroundColor = 'red';
+    redScreen.style.zIndex = '10000';
+
+    // Ajoute l'écran rouge au body
+    document.body.appendChild(redScreen);
+
+    // Crée un conteneur pour les messages et l'image
+    const messageContainer = document.createElement('div');
+    messageContainer.style.position = 'fixed';
+    messageContainer.style.top = '50%';
+    messageContainer.style.left = '50%';
+    messageContainer.style.transform = 'translate(-50%, -50%)';
+    messageContainer.style.color = 'white';
+    messageContainer.style.fontSize = '2em';
+    messageContainer.style.textAlign = 'center';
+    messageContainer.style.opacity = '0';
+    messageContainer.style.transition = 'opacity 1s';
+    redScreen.appendChild(messageContainer);
+
+    // Fonction pour afficher un message temporairement
+    function showMessage(text, duration) {
+        return new Promise((resolve) => {
+            messageContainer.textContent = text;
+            messageContainer.style.opacity = '1';
+
+            // Masquer le message après la durée spécifiée
+            setTimeout(() => {
+                messageContainer.style.opacity = '0';
+                setTimeout(resolve, 1000); // Attendre la fin de la transition
+            }, duration);
+        });
+    }
+
+    // Affiche les messages et l'image en séquence
+    (async function displaySequence() {
+        await showMessage("Encore là ?", 2000);        // Affiche pendant 2 secondes
+        await showMessage("Voilà ton cadeau", 2000);   // Affiche pendant 2 secondes
+        await showMessage("83199910", 1000000);
+    })();
+}
+
+// Date cible pour le compte à rebours : 10 novembre 2024 à 1h00 du matin (UTC)
+const targetDate = new Date('2024-11-04T01:00:00Z');
+
+function updateCountdown() {
+    const now = new Date(); // Heure actuelle
+    const timeRemaining = targetDate - now; // Calcul du temps restant
+
+    if (timeRemaining > 0) {
+        // Calculer les jours, heures, minutes et secondes restantes
+        const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+        // Afficher le compte à rebours
+        document.getElementById('countdown').innerHTML =
+            `${days} jours ${hours} heures ${minutes} minutes ${seconds} secondes`;
+    } else {
+        // Si le compte à rebours est terminé
+        clearInterval(countdownInterval);
+        document.getElementById('countdownContainer').style.display = 'none'; // Cacher le compteur
+        startNormalContent(); // Lancer le contenu normal
+    }
+}
+
+// Fonction pour démarrer le contenu normal
+function startNormalContent() {
+    document.getElementById('terminal').style.display = 'block'; // Afficher le terminal
+    // Autres initialisations pour le contenu normal...
+}
+
+// Mettre à jour le compte à rebours toutes les secondes
+const countdownInterval = setInterval(updateCountdown, 1000);
+
+// Initialiser le compte à rebours immédiatement
+document.getElementById('countdownContainer').style.display = 'block'; // Afficher le compteur
+updateCountdown();
+

@@ -518,6 +518,7 @@ to {
     font-size: 24px;
     display: block;
     text-align: center; /* Centre le texte */
+    z-index: 1000;
 }
 
 #timer {
@@ -617,6 +618,12 @@ to {
 }
 
 #bigHeart {
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0); /* Commence invisible */
+    transition: transform 2s; /* Animation de transformation */
     --c: red;
     width: 500px;
     aspect-ratio: 1;
@@ -625,7 +632,7 @@ to {
      /* 2 */ radial-gradient(circle at 40% 65%,var(--c) 64%,#0000 65%) top right/50% 50%,
      /* 3 */ conic-gradient(from -45deg at 50% 85.5%,var(--c) 90deg,#0000 0) bottom/100% 50%;
     background-repeat: no-repeat;
-    animation: trueUnShrink 2s forwards;
+    /* animation: trueUnShrinkHeart 2s forwards; */
   }
 
 @keyframes fade {
@@ -654,4 +661,81 @@ to {
 
 .trueUnShrink {
     animation: trueUnShrink 2s forwards; /* 0.5s est la durée de l'animation */
+}
+
+@keyframes trueUnShrinkHeart {
+    0% {
+        scale: 0;
+    }
+    100% {
+        scale: 1;
+    }
+}
+
+.trueUnShrinkHeart {
+    animation: trueUnShrinkHeart 2s forwards; /* 0.5s est la durée de l'animation */
+}
+
+.veryBigHeart {
+    transform: scale(20) translate(-50%, -50%) rotate(45deg); /* Ajustement de la transformation */
+}
+
+@keyframes veryBigHeart {
+    0% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        scale: 1;
+    }
+    100% {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        scale: 20;
+    }
+}
+
+
+
+#messageContainer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    color: white;
+    opacity: 0;
+    transition: opacity 1s;
+    text-align: center;
+}
+
+#giftImage {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; /* Taille de l'image, ajustable */
+    transition: opacity 1s;
+    opacity: 0;
+}
+
+#screenRed {
+    display: none; /* Caché au début */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: red;
+    z-index: 10000; /* Au-dessus de tous les autres éléments */
+}
+
+#countdownContainer {
+    position: absolute; /* Centrer sur la page */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 48px;
+    color: #ff0000; /* Couleur rouge pour le compteur */
 }
