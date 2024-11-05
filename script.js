@@ -959,7 +959,7 @@ function updateCountdown() {
 
         // Afficher le compte à rebours
         document.getElementById('countdown').innerHTML =
-            `${days} jours ${hours} heures ${minutes} minutes ${seconds} secondes`;
+            `${days} jours <br> ${hours} heures <br> ${minutes} minutes <br> ${seconds} secondes`;
     } else {
         // Si le compte à rebours est terminé
         clearInterval(countdownInterval);
