@@ -944,7 +944,7 @@ function printGift() {
 }
 
 // Date cible pour le compte à rebours : 10 novembre 2024 à 1h00 du matin (UTC)
-const targetDate = new Date('2024-11-10T01:00:00Z');
+const targetDate = new Date('2024-11-10T00:00:00Z');
 
 function updateCountdown() {
     const now = new Date(); // Heure actuelle
