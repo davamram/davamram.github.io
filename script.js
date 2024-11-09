@@ -52,7 +52,13 @@ const commands = {
     "raclette": function() {
         fadeToBlack();
     },
-    "je t'aime": "Moi aussi je t'aime mon mimi"
+    "je t'aime": "Moi aussi je t'aime mon mimi",
+    "tu m'aimes ?": "De tout mon coeur",
+    "oléoduc": "Oh, tu prends de l'avance. Mais d'abord, qui es-tu ?",
+    "chizon": "Pas de blasphème pendant cette journée. Il faut respecter le nom divin",
+    "soop": "Hmmmm, good soop",
+    "good soop": "Hmmmm, good soop",
+    "Pistache": "Mon bébé. Maintenant tu dois m'envoyer une photo de lui"
 };
 
 // Gestion de l'input de l'utilisateur
@@ -382,7 +388,7 @@ function startJeTaimeAnimation() {
     endGradientOverlay.classList.add('come-up-grad');
 
     // Remplace les retours à la ligne par <br> pour le texte
-    let text = "Texte censuré. Encore un coup de Macron.<br>J'ai fait cette modification avant de te l'envoyer,<br>je pense que tu comprends pourquoi c'était nécessaire";
+    let text = "C'est le meilleur jour de l'année. Tu sais qu'il compte beaucoup pour moi, probablement plus que pour toi. La Terre était au même endroit quand tu es née, ce qui fait de cette position la plus importante de tout l'univers.<br>Je retiens mes mots, car je t'ai déjà tout dit plein de fois. Je te souhaite de passer, ou d'avoir passé, une merveilleuse journée. Tu le mérites. Je sais qu'elle ne sera pas parfaite, sinon on l'aurait commencée avec une session de mots fléchés, mais on peut quand même s'en rapprocher.<br>Je suis tellement reconnaissant d'avoir eu une année de plus à tes côtés, et aussi tellement fier de tout ce que tu as fait pendant celle-ci. Comme si tu avais encore besoin de prouver que tu es la personne la plus incroyable de ce monde. Alors arrête un peu, tu as déjà mérité ta place à l'Olympe.<br>J'ai hâte de te retrouver. J'espère que tu prends soin de la partie de moi que tu as emportée avec toi.";
     let i = 0;
     const letter = document.getElementById('letter');
 
@@ -409,7 +415,7 @@ function startJeTaimeAnimation() {
     // Attendre 10 secondes après la fin de createLetters
     setTimeout(() => {
         fadeToBlack(); // Affiche l'écran noir avec le cœur rouge
-    }, 10000); // 10000 millisecondes = 10 secondes
+    }, 60000); // 10000 millisecondes = 10 secondes
 }
 
 
